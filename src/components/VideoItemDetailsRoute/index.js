@@ -13,6 +13,8 @@ const apiStatusConstants = {
   failure: 'FAILURE',
   initial: 'INITIAL',
   inprogress: 'INPROGRESS',
+  isLikeActive: false,
+  isDislikeActive:false
 }
 
 class VideoItemDetailsRoute extends Component {
@@ -89,14 +91,31 @@ class VideoItemDetailsRoute extends Component {
     const {name, profileImageUrl, subscriberCount} = channel
     const publishedDistance = formatDistanceToNow(new Date(publishedAt))
 
-    const likedClassName =
-      activeLikeDislikebuttonStatus === 'like'
-        ? 'active-like-dislike-color'
-        : 'inactive-like-dislike-color'
-    const dislikedClassName =
-      activeLikeDislikebuttonStatus === 'dislike'
-        ? 'active-like-dislike-color'
-        : 'inactive-like-dislike-color'
+    onClickLike = () => {
+      const {isLikeActive,isDislikeActive} = this.state;
+      if (isLikeActive){
+        this.setState({isLikeActive:false})
+      }
+      else{
+        this.setState({isLikeActive:true})
+        if(isDislikeActive){
+          this.setState({isDislikeActive:false})
+        }
+      }
+    }
+
+    onClickDislike = () => {
+      const {isDislikeActive,isLikeActive} = this.state;
+      if(isDislikeActive){
+        this.setState({isDislikeActive:false})
+      }
+      else{
+        this.setState({isDislikeActive:true})
+         if(isLikeActive){
+           this.setState({isLikeActive:false})
+         }
+      }
+    }
 
     return (
       <div>
@@ -110,7 +129,7 @@ class VideoItemDetailsRoute extends Component {
           <div>
             <button
               type="button"
-              onClick={this.onClickLikeDislike}
+              onClick={this.onClickLike}
               className={likedClassName}
             >
               <AiOutlineLike />
@@ -119,7 +138,7 @@ class VideoItemDetailsRoute extends Component {
             <button
               type="button"
               className={dislikedClassName}
-              onClick={this.onClickLikeDislike}
+              onClick={this.onClickDislike}
             >
               <AiOutlineDislike />
               <p>dislike</p>
